@@ -11,23 +11,18 @@ console.log(`Server is listening on port ${port}`);
 const socket = require("socket.io");
 const io = socket(server);
 
-/*
- * this array holds everything that has been drawn since the server started.
- * IMPORTANT: any data stored here will disappear when the server is stopped/started.
- */
-const strokes = [];
+let words = [];
 
 io.sockets.on('connection', (socket) => {
   console.log("new connection: " + socket.id);
 
-  // send just this new client all of the past strokes it should
-  // draw on the canvas.
-  socket.emit("allDrawingData", {strokes: strokes});
-
-  // event handling when we receive a new drawing element from this
-  // socket: send it out to everyone.
-  socket.on('drawStroke', (data) => {
-    strokes.push(data.points);
-    io.emit('drawStroke', data);
-  })
+  socket.emit("allWords", { words: words });
+  socket.on('clear', () => {
+    words = [];
+  });
+  socket.on('addWord', (data) => {
+    words.push(data);
+    words = words.slice(-15);
+    io.emit('addWord', data);
+  });
 });
