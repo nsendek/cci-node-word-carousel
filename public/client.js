@@ -118,7 +118,7 @@ function keyPressed() {
 }
 
 function emitWord() {
-  if (currentWord === clear) {
+  if (currentWord === 'clear') {
     socket.emit('clear');
   } else {
     socket.emit('addWord', { text: currentWord, id: MY_ID });
@@ -138,12 +138,11 @@ function onAddWord(word) {
   word.x = lastX;
   word.y = height / 2;
   word.width = textWidth(word.width);
-
+  console.log(word);
   wordParticles.push(word);
 }
 
 function onAllWords(data) {
-  console.log('onAllWords', data);
   wordParticles = data.words;
   prepWordParticles(wordParticles);
 }

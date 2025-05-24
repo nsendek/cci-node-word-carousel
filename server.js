@@ -19,6 +19,7 @@ io.sockets.on('connection', (socket) => {
   socket.emit("allWords", { words: words });
   socket.on('clear', () => {
     words = [];
+    console.log('cleared')
   });
   socket.on('addWord', (data) => {
     words.push(data);
